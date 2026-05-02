@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule | Gunatit Kishore Shibir 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='schedule.css') }}" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="ambient ambient-left"></div>
+      <div class="ambient ambient-right"></div>
+
+      <header class="hero">
+        <nav class="site-nav" aria-label="Primary navigation">
+          <div class="site-nav__group">
+            <div class="site-nav__links">
+              <a href="{{ url_for('index') }}">Home</a>
+              <a href="{{ url_for('scheduale') }}">Schedule</a>
+              <a href="#schedule-panel">Program</a>
+            </div>
+          </div>
+        </nav>
+
+        <section class="hero__content">
+          <div class="hero__text">
+            <p class="eyebrow">Gunatit Kishore Shibir 2026</p>
+            <h1>Three Day Schedule</h1>
+            <p class="hero__lead">
+              View the day-wise program below. Click `1st Day`, `2nd Day`, or
+              `3rd Day` to open the table for that day.
+            </p>
+
+            <div class="hero__actions">
+              <a class="hero__button hero__button--primary" href="#schedule-panel">
+                View Schedule
+              </a>
+              <a class="hero__button hero__button--ghost" href="{{ url_for('index') }}">
+                Back Home
+              </a>
+            </div>
+          </div>
+
+        </section>
+      </header>
+
+      <main class="main-content">
+        <section class="schedule-card" id="schedule-panel">
+          <div class="section-head">
+            <p class="section-head__tag">Daily Program</p>
+            <h2>Choose the Day</h2>
+            <p class="section-head__text">
+              Only one day's table is shown at a time for a clean schedule
+              view.
+            </p>
+          </div>
+
+          <div class="schedule-tabs" role="tablist" aria-label="Schedule Days">
+            <button class="schedule-tab is-active" type="button" data-target="day-1">
+              1st Day
+            </button>
+            <button class="schedule-tab" type="button" data-target="day-2">
+              2nd Day
+            </button>
+            <button class="schedule-tab" type="button" data-target="day-3">
+              3rd Day
+            </button>
+          </div>
+
+          <div class="schedule-panels">
+            <section class="schedule-day schedule-day--active" id="day-1">
+              <div class="day-header">
+                <h3>1st Day Schedule</h3>
+                <p>Comming  Soon</p>
+              </div>
+
+              <div class="table-wrap">
+                <table class="schedule-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Program</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                    </tr>
+                    <tr>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                    </tr>
+                    <tr>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="schedule-day" id="day-2" hidden>
+              <div class="day-header">
+                <h3>2nd Day Schedule</h3>
+                <p>Comming  Soon</p>
+              </div>
+
+              <div class="table-wrap">
+                <table class="schedule-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Program</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                    </tr>
+                    <tr>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                    </tr>
+                    <tr>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                      <td>  ---  </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="schedule-day" id="day-3" hidden>
+              <div class="day-header">
+                <h3>3rd Day Schedule</h3>
+                <p>Comming  Soon</p>
+              </div>
+
+              <div class="table-wrap">
+                <table class="schedule-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Program</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td> ---  </td>
+                      <td> ---  </td>
+                      <td> ---  </td>
+                    </tr>
+                    <tr>
+                      <td> ---  </td>
+                      <td> ---  </td>
+                      <td> ---  </td>
+                    </tr>
+                    <tr>
+                      <td> ---  </td>
+                      <td> ---  </td>
+                      <td> ---  </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const scheduleTabs = document.querySelectorAll(".schedule-tab");
+      const scheduleDays = document.querySelectorAll(".schedule-day");
+
+      scheduleTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const targetId = tab.dataset.target;
+
+          scheduleTabs.forEach((button) => {
+            button.classList.remove("is-active");
+          });
+
+          scheduleDays.forEach((panel) => {
+            const isTarget = panel.id === targetId;
+            panel.hidden = !isTarget;
+            panel.classList.toggle("schedule-day--active", isTarget);
+          });
+
+          tab.classList.add("is-active");
+        });
+      });
+    </script>
+  </body>
+</html>

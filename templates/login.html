@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Gunatit Kishore Shibir 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="ambient ambient-left"></div>
+      <div class="ambient ambient-right"></div>
+
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('schedule') }}">Schedule</a>
+        <a href="{{ url_for('login') }}" class="is-active">Login</a>
+      </nav>
+
+      <main class="login-stage">
+        <section class="login-hero">
+          <div class="login-hero__copy">
+            <p class="eyebrow">Gunatit Kishore Shibir 2026</p>
+            <h1>Member Login</h1>
+            <p class="login-hero__lead">
+              Enter your details to continue into the shibir experience. After
+              login, the home page will greet you by name and keep the journey
+              feeling personal.
+            </p>
+
+            <div class="login-hero__chips">
+              <span>Quick Access</span>
+              <span>Welcome by Name</span>
+              <span>Same Shibir Theme</span>
+            </div>
+
+            <div class="login-hero__panel">
+              <p class="login-hero__tag">Why Login?</p>
+              <h2>Step Into The Experience</h2>
+              <p>
+                Use your name and mobile number to enter smoothly. If you have
+                an SMV number, add it too. This screen is kept simple for fast
+                access.
+              </p>
+            </div>
+          </div>
+
+          <div class="login-card">
+            <p class="login-card__tag">Secure Entry</p>
+            <h2>Login Details</h2>
+
+            {% if login_error %}
+            <div class="login-status login-status--error">{{ login_error }}</div>
+            {% endif %}
+
+            <form class="login-form" action="{{ url_for('login') }}" method="post">
+              <label class="form-field">
+                <span>Name</span>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  value="{{ form_data.get('name', '') if form_data else '' }}"
+                  required
+                />
+              </label>
+
+              <label class="form-field">
+                <span>Mobile No.</span>
+                <input
+                  type="tel"
+                  name="mobile_no"
+                  placeholder="Enter your mobile number"
+                  value="{{ form_data.get('mobile_no', '') if form_data else '' }}"
+                  required
+                />
+              </label>
+
+              <label class="form-field">
+                <span>SMV No. (if you have)</span>
+                <input
+                  type="text"
+                  name="smv_no"
+                  placeholder="Optional SMV number"
+                  value="{{ form_data.get('smv_no', '') if form_data else '' }}"
+                />
+              </label>
+
+              <label class="form-field">
+                <span>Password</span>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+                />
+              </label>
+
+              <button class="login-btn" type="submit">Login</button>
+            </form>
+
+            <div class="login-card__footer">
+              <p>
+                After login, you will be redirected to the home page with your
+                welcome message.
+              </p>
+              <a class="login-link" href="{{ url_for('index') }}">Back to Home</a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

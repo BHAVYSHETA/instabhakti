@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navadha Bhakti PPT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='katha.css') }}" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="ambient ambient-left"></div>
+      <div class="ambient ambient-right"></div>
+
+      <header class="hero">
+        <nav class="site-nav" aria-label="Primary navigation">
+          <div class="site-nav__group">
+
+        <section class="hero__content">
+          <div class="hero__text">
+            <p class="eyebrow">Nine sacred paths of devotion</p>
+            <h1>Navadha Bhakti PPT Portal</h1>
+            <p class="hero__lead">
+              Open the presentation for each bhakti from this page. You only
+              need to paste your own PPT link inside each card button.
+            </p>
+
+            <div class="hero__actions">
+              <a class="hero__button hero__button--primary" href="#bhakti-grid">
+                View Bhaktis
+              </a>
+              <a class="hero__button hero__button--ghost" href="{{ url_for('index') }}">
+                Back Home
+              </a>
+            </div>
+          </div>
+
+          <div class="hero__panel">
+            <div class="info-card">
+              <p class="info-card__tag">How To Use</p>
+              <h2>Add your PPT links</h2>
+              <p>
+                Put your PPT URL inside the <strong>data-ppt-url</strong>
+                attribute of each button. When clicked, the presentation opens
+                in a new tab.
+              </p>
+            </div>
+          </div>
+        </section>
+      </header>
+
+      <main class="main-content">
+        <section class="section-head">
+          <p class="section-head__tag">Navadha Bhakti</p>
+          <h2>Nine Bhaktis Presentation Section</h2>
+          <p class="section-head__text">
+            Each card below is ready for your own PPT link. If no link is added,
+            the page will show a small message instead of opening a file.
+          </p>
+        </section>
+
+        <section class="bhakti-grid" id="bhakti-grid">
+          <article class="bhakti-card bhakti-card--gold">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">01</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Shravanam</h3>
+            <p class="bhakti-card__subtitle">Devotion through listening</p>
+            <p class="bhakti-card__description">
+              Hearing divine names, teachings, and sacred stories with full
+              attention and devotion.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Shravanam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--coral">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">02</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Kirtanam</h3>
+            <p class="bhakti-card__subtitle">Devotion through singing</p>
+            <p class="bhakti-card__description">
+              Singing the glories of the divine through bhajans, kirtans, and
+              joyful remembrance.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Kirtanam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--rose">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">03</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Smaranam</h3>
+            <p class="bhakti-card__subtitle">Devotion through remembrance</p>
+            <p class="bhakti-card__description">
+              Keeping the divine in the heart and mind through constant inner
+              remembrance.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Smaranam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--violet">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">04</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Pada Sevanam</h3>
+            <p class="bhakti-card__subtitle">Devotion through service</p>
+            <p class="bhakti-card__description">
+              Serving the feet of the Lord with humility, care, and sacred
+              action.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Pada Sevanam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--teal">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">05</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Archanam</h3>
+            <p class="bhakti-card__subtitle">Devotion through worship</p>
+            <p class="bhakti-card__description">
+              Offering worship, flowers, and reverence through rituals and
+              sacred intention.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Archanam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--blue">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">06</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Vandanam</h3>
+            <p class="bhakti-card__subtitle">Devotion through prayer</p>
+            <p class="bhakti-card__description">
+              Bowing with gratitude and expressing heartfelt prayers to the
+              divine.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Vandanam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--green">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">07</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Dasyam</h3>
+            <p class="bhakti-card__subtitle">Devotion through servitude</p>
+            <p class="bhakti-card__description">
+              Living as a devoted servant of the divine with loyalty and
+              discipline.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Dasyam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--amber">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">08</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Sakhyam</h3>
+            <p class="bhakti-card__subtitle">Devotion through friendship</p>
+            <p class="bhakti-card__description">
+              Building a loving friendship with the divine through trust and
+              closeness.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Sakhyam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+
+          <article class="bhakti-card bhakti-card--sunset">
+            <div class="bhakti-card__top">
+              <span class="bhakti-card__number">09</span>
+              <span class="bhakti-card__glow"></span>
+            </div>
+            <h3>Atma Nivedanam</h3>
+            <p class="bhakti-card__subtitle">Devotion through surrender</p>
+            <p class="bhakti-card__description">
+              Offering the entire self to the divine in complete surrender and
+              faith.
+            </p>
+            <button class="ppt-btn" type="button" data-bhakti="Atma Nivedanam" data-ppt-url="">
+              Open PPT
+            </button>
+          </article>
+        </section>
+
+        <div class="status-panel" id="statusPanel" aria-live="polite"></div>
+      </main>
+    </div>
+
+    <script>
+      const pptButtons = document.querySelectorAll(".ppt-btn");
+      const statusPanel = document.getElementById("statusPanel");
+
+      pptButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const pptUrl = button.dataset.pptUrl.trim();
+          const bhakti = button.dataset.bhakti;
+
+          if (!pptUrl) {
+            statusPanel.textContent =
+              bhakti +
+              " PPT link is not added yet. Paste your link in data-ppt-url.";
+            statusPanel.className =
+              "status-panel status-panel--visible status-panel--pending";
+            return;
+          }
+
+          statusPanel.textContent = bhakti + " PPT opened in a new tab.";
+          statusPanel.className = "status-panel status-panel--visible";
+          window.open(pptUrl, "_blank", "noopener");
+        });
+      });
+    </script>
+  </body>
+</html>

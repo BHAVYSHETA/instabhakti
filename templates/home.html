@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="gu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gunatit Kishore Shibir 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="ambient ambient-left"></div>
+      <div class="ambient ambient-right"></div>
+
+      <header class="hero" id="home">
+        <nav class="site-nav" aria-label="Primary navigation">
+          <div class="site-nav__group">
+            <div class="site-nav__links">
+              <a href="{{ url_for('index') }}">Home</a>
+              <a href="{{ url_for('schedule') }}">Schedule</a>
+              <a href="#intro">About the Shibir</a>
+              <a href="{{ url_for('katha') }}">Katha</a>
+              {% if welcome_name %}
+                <a href="{{ url_for('competition') }}">Competition</a>  <!-- ✅ NEW -->
+              {% endif %}
+              <a href="#join">Registration</a>
+              <a href="#highlights">Highlights</a>
+              <a href="#contact">Contact</a>
+              {% if welcome_name %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+              {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+              {% endif %}
+            </div>
+          </div>
+        </nav>
+
+        <section class="hero__content">
+          <div class="hero__text">
+            <div class="hero__topline">
+              <div class="hero__logo-slot" aria-label="Logo placeholder">
+                <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Shibir Logo" />
+              </div>
+
+            </div>
+
+            <p class="eyebrow">Gunatit Kishore Shibir 2026</p>
+            {% if welcome_name %}
+            <p class="welcome-pill">Welcome {{ welcome_name }}</p>
+            {% endif %}
+
+            <h1>Insta Bhakti</h1>
+            <p class="hero__lead">
+              Get ready for a 3-day divine, digital and heart-touching kishor
+              shibir at Shri Swaminarayan Mandir, Ved Road on 14th, 15th, 16th
+              May. It is time to give a new version of devotion to a life
+              filled with the virus of Maya.
+            </p>
+
+            <div class="hero__meta" aria-label="Shibir details">
+              <div class="hero__meta-chip">
+                <span class="hero__meta-label">Date</span>
+                <strong>14, 15, 16 May</strong>
+              </div>
+              <div class="hero__meta-chip">
+                <span class="hero__meta-label">Location</span>
+                <strong>શ્રી સ્વામિનારાયણ મંદિર, વેડરોડ</strong>
+              </div>
+            </div>
+
+            <div class="hero__actions">
+              <a
+                class="hero__button hero__button--primary hero__button--large"
+                href="#join"
+              >
+                Join Now
+              </a>
+              <a class="hero__button hero__button--ghost" href="#highlights">
+                Shibir Highlights
+              </a>
+            </div>
+
+            <p class="hero__caption">
+              A vibrant spiritual experience with guidance, devotion, fun, and
+              powerful life direction.
+            </p>
+          </div>
+
+          <div class="hero__panel">
+            <div class="info-card">
+              <p class="info-card__tag">System Reset Mode</p>
+              <h2>Give Your Life a Divine Update</h2>
+              <p>
+                Under the guidance of saints and sages, experience the power of
+                devotion, meditation, fun, dialogue, solutions and spiritual
+                gatherings.
+              </p>
+              <ul class="info-list">
+                <li>Divine meditation and special Mahapuja</li>
+                <li>Live session on Insta Bhakti</li>
+                <li>Floral entertainment and special guests</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </header>
+
+      <main class="main-content">
+        <section class="content-card intro-section" id="intro">
+          <div class="section-head">
+            <p class="section-head__tag">About the Shibir</p>
+            <h2>Is Your System Also 'Hanging'?</h2>
+          </div>
+
+          <div class="intro-copy">
+            <p>
+              All day on mobile, reels, social media and overthinking... In
+              today's digital age, our minds and lives are filled with
+              'viruses'. As a result, stress, tension and anxiety arise.
+            </p>
+            <p>
+              It's time to 'Delete' the clutter in your mind and install a new
+              version of devotion. Come, under the guidance of saints and
+              sages, experience a powerful 'System Reset' for 3 days.
+            </p>
+          </div>
+        </section>
+
+        <section class="content-card registration-section" id="join">
+          <div class="section-head">
+            <p class="section-head__tag">Registration</p>
+            <h2>Has your 'Blue Tick' been confirmed? ✅</h2>
+            <p class="section-head__text">
+              Choose your registration type and fill the form below.
+            </p>
+          </div>
+
+        <div class="registration-switch" role="tablist" aria-label="Registration Type">
+          <button
+            class="registration-switch__button {% if active_form != 'new' %}is-active{% endif %}"
+            type="button"
+            data-target="existing-member-form"
+            aria-selected="{% if active_form != 'new' %}true{% else %}false{% endif %}"
+          >
+            Have SMV No.
+          </button>
+          <button
+            class="registration-switch__button {% if active_form == 'new' %}is-active{% endif %}"
+            type="button"
+            data-target="new-sabhya-form"
+            aria-selected="{% if active_form == 'new' %}true{% else %}false{% endif %}"
+          >
+            New Sabhya
+          </button>
+        </div>
+
+          <form
+            class="register-form {% if active_form != 'new' %}register-form--active{% endif %}"
+            id="existing-member-form"
+            action="{{ url_for('submit') }}"
+            method="post"
+            data-form-mode="existing"
+            {% if active_form == 'new' %}hidden{% endif %}
+          >
+            {{ csrf_token() }}
+            <input type="hidden" name="registration_type" value="existing" />
+
+            <div class="register-grid register-grid--compact">
+              <label class="form-field">
+                <span>Name</span>
+                <input type="text" name="name" placeholder="Enter your name" required />
+              </label>
+
+              <label class="form-field">
+                <span>Mobile No.</span>
+                <input
+                  type="tel"
+                  name="mobile_no"
+                  placeholder="Enter your mobile number"
+                  required
+                />
+              </label>
+
+              <label class="form-field">
+                <span>SMV No.</span>
+                <input type="text" name="smv_no" placeholder="Enter your SMV number" required />
+              </label>
+
+              <lable class="form-field">
+                <span>Password</span>
+                <input type="password" name="password" placeholder="Enter your password" required />
+              </lable>
+
+              <label class="form-field">
+                <span>Confirm Password</span>
+                <input type="password" name="confirm_password" placeholder="Confirm your password" required />
+              </label>
+            </div>
+
+
+
+            <button class="submit-btn" type="submit">🎫 Register With SMV No.</button>
+          </form>
+
+          <form
+            class="register-form {% if active_form == 'new' %}register-form--active{% endif %}"
+            id="new-sabhya-form"
+            action="{{ url_for('submit') }}"
+            method="post"
+            data-form-mode="new"
+            {% if active_form != 'new' %}hidden{% endif %}
+          >
+            {{ csrf_token() }}
+            <input type="hidden" name="registration_type" value="new" />
+
+            <div class="register-grid register-grid--full">
+              <label class="form-field">
+                <span>First Name</span>
+                <input type="text" name="first_name" placeholder="Enter first name" required />
+              </label>
+
+              <label class="form-field">
+                <span>Middle Name</span>
+                <input type="text" name="middle_name" placeholder="Enter middle name" />
+              </label>
+
+              <label class="form-field">
+                <span>Last Name</span>
+                <input type="text" name="last_name" placeholder="Enter last name" required />
+              </label>
+
+              <label class="form-field">
+                <span>Native Village</span>
+                <input type="text" name="native_village" placeholder="Enter native village" />
+              </label>
+
+              <label class="form-field">
+                <span>Contact No.</span>
+                <input type="tel" name="contact_no" placeholder="10-digit number" required />
+              </label>
+
+              <label class="form-field">
+                <span>Date of Birth</span>
+                <input type="date" name="dob" required />
+              </label>
+
+              <label class="form-field">
+                <span>City</span>
+                <input type="text" name="city" value="Surat" />
+              </label>
+
+              <label class="form-field">
+                <span>State</span>
+                <input type="text" name="state" value="Gujarat" />
+              </label>
+
+              <label class="form-field">
+                <span>Country</span>
+                <input type="text" name="country" value="India" />
+              </label>
+
+              <label class="form-field">
+                <span>Occupation</span>
+                <input type="text" name="occupation" placeholder="Enter occupation" />
+              </label>
+
+              <label class="form-field">
+                <span>Education</span>
+                <input type="text" name="education" placeholder="Enter education" />
+              </label>
+
+              <label class="form-field">
+                <span>Ref. Name</span>
+                <input type="text" name="ref_name" placeholder="Reference name" />
+              </label>
+
+              <label class="form-field">
+                <span>Ref. Contact</span>
+                <input type="tel" name="ref_contact" placeholder="Reference contact" />
+              </label>
+
+              <label class="form-field">
+                <span>Sabha</span>
+                <select class="form-select" name="sabha">
+                  <option value="Kishore Sabha">Kishore Sabha</option>
+                  <option value="Yuva Sabha">Yuva Sabha</option>
+                  <option value="Bal Sabha">Bal Sabha</option>
+                </select>
+              </label>
+
+              <fieldset class="form-field gender-field">
+                <span>Gender</span>
+                <div class="gender-toggle">
+                  <label class="gender-option">
+                    <input type="radio" name="gender" value="Male" checked />
+                    <span>Male</span>
+                  </label>
+                  <label class="gender-option">
+                    <input type="radio" name="gender" value="Female" />
+                    <span>Female</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <label class="form-field">
+                <span>Password</span>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="At least 6 characters"
+                  minlength="6"
+                />
+              </label>
+
+              <lable class="form-field">
+                <span>Confirm Password</span>
+                <input
+                  type="password"
+                  name="confirm_password"
+                  placeholder="Confirm your password"
+                  minlength="6"
+                />
+              </lable>
+            </div>
+
+            <button class="submit-btn" type="submit">✨ Register as New Sabhya</button>
+          </form>
+
+          <div class="form-note">
+          </div>
+
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+              <div class="form-status form-status--visible {% if category == 'success' %}form-status--success{% else %}form-status--error{% endif %}" aria-live="polite">
+                {{ message }}
+              </div>
+              {% endfor %}
+            {% else %}
+            <div class="form-status" id="formStatus" aria-live="polite"></div>
+            {% endif %}
+          {% endwith %}
+
+          <div class="form-status" id="formStatus" aria-live="polite"></div>
+        </section>
+
+        <section class="content-grid" id="highlights">
+          <article class="content-card highlight-card">
+            <p class="section-head__tag">What's New in the Shibir?</p>
+            <h2>🧘‍♂️ Connection with the Soul</h2>
+            <p>
+              In the morning, divine meditation, direct spiritual experiences,
+              and special Mahapuja with the guidance of saints.
+            </p>
+          </article>
+
+          <article class="content-card highlight-card">
+            <p class="section-head__tag">Insta Bhakti</p>
+            <h2>Live Session</h2>
+            <p>
+              In today's time, how to practice devotion, with inspirational and
+              practical discussions.
+            </p>
+          </article>
+
+          <article class="content-card highlight-card">
+            <p class="section-head__tag">Smart Solutions</p>
+            <h2>Expert Sessions</h2>
+            <p>
+              Simple, modern, and engaging answers to your perplexing
+              questions.
+            </p>
+          </article>
+
+          <article class="content-card highlight-card">
+            <p class="section-head__tag">Full fun</p>
+            <h2>🎭 Entertainment</h2>
+            <p>
+              Memorable moments with humorous plays, quizzes and devotional
+              dances.
+            </p>
+          </article>
+
+          <article class="content-card highlight-card">
+            <p class="section-head__tag">Special Visit</p>
+            <h2>Special Guest</h2>
+            <p>
+              A special opportunity to meet live with our favorite Insta
+              influencers.
+            </p>
+          </article>
+
+          <article class="content-card highlight-card">
+            <p class="section-head__tag">Evening enjoyment</p>
+            <h2>Carnival and Rasotsav</h2>
+            <p>
+              Our favorite, the Crispy Carnival, the Raasotsav, and the joy of
+              the divine group aarti.
+            </p>
+          </article>
+        </section>
+
+        <section class="content-card about-section" id="about">
+          <div class="section-head">
+            <p class="section-head__tag">Final Call</p>
+            <h2>These 3 days can be a game changer for your life.</h2>
+            <p class="section-head__text">
+              Join today to install the new version of Bhakti. Confirm your
+              seat and your team now.
+            </p>
+          </div>
+
+          <div class="about-grid">
+            <article class="about-block">
+              <h3>🔘 Update My System</h3>
+              <p>
+                Don't delay. Fill in the details in the registration form given
+                above and be a part of the Shibir.
+              </p>
+              <a class="inline-cta" href="#join">અહીં રજીસ્ટ્રેશન કરો</a>
+            </article>
+          </div>
+        </section>
+
+        <footer class="content-card footer-card" id="contact">
+          <div class="section-head">
+            <p class="section-head__tag">કોન્ટેક્ટ અને અપડેટ્સ</p>
+            <h2>વધુ માહિતી માટે જોડાયેલા રહો</h2>
+          </div>
+
+          <div class="footer-grid">
+            <article class="footer-block">
+              <h3>📞 હેલ્પલાઇન / કોન્ટેક્ટ</h3>
+              <p>+91 9428469837</p>
+            </article>
+
+            <article class="footer-block map-block">
+              <h3>🗺️ મેપ / દિશા</h3>
+              <a
+                href="https://www.google.com/maps/place/gunatit+kishor+sabha/@21.2295393,72.8199783,17z/data=!4m6!3m5!1s0x3be04eb966565bcf:0x6dbb611aa95a5fb!8m2!3d21.2295393!4d72.8225532!16s%2Fg%2F1tfvxm3h?entry=ttu&g_ep=EgoyMDI2MDQyNy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener"
+                class="map-link"
+              >
+                📍 Shree Swaminarayan Mandir
+                <span>Ved Road, Surat</span>
+              </a>
+            </article>
+
+            <article class="footer-block">
+              <h3>📸 Instagram Updates</h3>
+              <p>Follow us on Instagram for daily updates!</p>
+              <a
+                href="https://www.instagram.com/gunatit_kishor_activity/"
+                target="_blank"
+                rel="noopener"
+                class="inline-cta"
+              >
+                Instagram
+              </a>
+            </article>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      const switchButtons = document.querySelectorAll(
+        ".registration-switch__button"
+      );
+      const registerForms = document.querySelectorAll(".register-form");
+      const formStatus = document.getElementById("formStatus");
+
+      switchButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const targetId = button.dataset.target;
+
+          switchButtons.forEach((item) => {
+            item.classList.remove("is-active");
+            item.setAttribute("aria-selected", "false");
+          });
+
+          registerForms.forEach((form) => {
+            const isTarget = form.id === targetId;
+            form.hidden = !isTarget;
+            form.classList.toggle("register-form--active", isTarget);
+          });
+
+          button.classList.add("is-active");
+          button.setAttribute("aria-selected", "true");
+
+          if (formStatus) {
+            formStatus.className = "form-status";
+            formStatus.textContent = "";
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>
