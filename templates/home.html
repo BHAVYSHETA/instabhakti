@@ -191,14 +191,16 @@
                 <input type="text" name="smv_no" placeholder="Enter your SMV number" required />
               </label>
 
-              <lable class="form-field">
+              <label class="form-field" style="position: relative;">
                 <span>Password</span>
-                <input type="password" name="password" placeholder="Enter your password" required />
-              </lable>
+                <input type="password" id="password1" name="password" placeholder="Enter your password" required style="padding-right:40px;" />
+                <span onclick="togglePassword('password1')" style="position:absolute; right:10px; top:38px; cursor:pointer;">👁️</span>
+              </label>
 
-              <label class="form-field">
+              <label class="form-field" style="position: relative;">
                 <span>Confirm Password</span>
-                <input type="password" name="confirm_password" placeholder="Confirm your password" required />
+                <input type="password" id="confirm1" name="confirm_password" placeholder="Confirm your password" required style="padding-right:40px;" />
+                <span onclick="togglePassword('confirm1')" style="position:absolute; right:10px; top:38px; cursor:pointer;">👁️</span>
               </label>
             </div>
 
@@ -307,25 +309,17 @@
                 </div>
               </fieldset>
 
-              <label class="form-field">
+              <label class="form-field" style="position: relative;">
                 <span>Password</span>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="At least 6 characters"
-                  minlength="6"
-                />
+                <input type="password" id="password2" name="password" placeholder="At least 6 characters" minlength="6" style="padding-right:40px;" />
+                <span onclick="togglePassword('password2')" style="position:absolute; right:10px; top:38px; cursor:pointer;">👁️</span>
               </label>
 
-              <lable class="form-field">
+              <label class="form-field" style="position: relative;">
                 <span>Confirm Password</span>
-                <input
-                  type="password"
-                  name="confirm_password"
-                  placeholder="Confirm your password"
-                  minlength="6"
-                />
-              </lable>
+                <input type="password" id="confirm2" name="confirm_password" placeholder="Confirm your password" minlength="6" style="padding-right:40px;" />
+                <span onclick="togglePassword('confirm2')" style="position:absolute; right:10px; top:38px; cursor:pointer;">👁️</span>
+              </label>
             </div>
 
             <button class="submit-btn" type="submit">✨ Register as New Sabhya</button>
@@ -507,6 +501,10 @@
           console.log('CSRF token not found');
         }
       });
+      function togglePassword(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === "password" ? "text" : "password";
+      }
     </script>
 
   </body>

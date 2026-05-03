@@ -1,11 +1,279 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Competition</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Competitions | Gunatit Kishore Shibir 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='competition.css') }}" />
 </head>
-<body>
-  <h1> Coming Soon </h1>
+<body class="{% if session.user_id %}user-state--logged-in{% else %}user-state--logged-out{% endif %}">
+  <div class="page-shell">
+    <!-- Instagram Top Nav -->
+    <nav class="top-nav">
+      <a href="{{ url_for('index') }}">🏠 Home</a>
+      <a href="{{ url_for('schedule') }}">📅 Schedule</a>
+      <a href="{{ url_for('competition') }}" class="is-active">🏆 Competitions</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+      <p class="eyebrow">Gunatit Kishore Shibir 2026</p>
+      
+      {% if session.user_id %}
+      <div class="personal-greeting">
+        <div class="greeting-icon">🙏</div>
+        <div>
+          <p class="greeting-welcome">Hi {{ session.user_name|default('Devotee') }}!</p>
+          <p class="greeting-message">Ready to showcase your talent?</p>
+        </div>
+      </div>
+      {% endif %}
+
+      <h1>🏆 Competitions</h1>
+      <p class="hero__lead">
+        Participate in our 3 exciting competitions and win divine blessings 
+        along with amazing prizes!
+      </p>
+
+      <div class="hero__actions">
+        <a href="#competitions" class="hero__button hero__button--primary">View Competitions</a>
+        <a href="#register" class="hero__button hero__button--ghost">Quick Register</a>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Competitions Table -->
+      <section class="content-card competitions-section" id="competitions">
+        <div class="section-head">
+          <p class="section-head__tag">તમારી પસંદગી</p>
+          <h2>Choose Your Competition</h2>
+          <p class="section-head__text">કીર્તન, ચરિત્ર લેખન, કડીગણ - તમારી ભક્તિની શક્તિ દર્શાવો!</p>
+        </div>
+
+        <table class="competitions-table">
+          <thead>
+            <tr>
+              <th>Competition</th>
+              <th>Rules</th>
+              <th>Register</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Kirtan Competition -->
+            <tr class="competition-row kirtan-card" data-category="kirtan">
+              <td>
+                <div class="competition-info">
+                  <div class="competition-icon">🎤</div>
+                  <div>
+                    <div class="competition-name">કીર્તન સ્પર્ધા</div>
+                    <div class="competition-type">ભક્તિભાવ સંગીત</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="rules-list">
+                  <div class="rule-item"><span>⏰</span> 2-5 મિનિટ</div>
+                  <div class="rule-item"><span>👤</span> એકલા</div>
+                  <div class="rule-item"><span>📜</span> ભગવાન સ્વામિનારાયણ ભજન</div>
+                </div>
+              </td>
+              <td>
+                <button class="register-btn" data-comp="kirtan">
+                  કીર્તન માટે નોંધણી
+                </button>
+              </td>
+            </tr>
+
+            <!-- Charitra Lekhan -->
+            <tr class="competition-row charitra-card" data-category="charitra">
+              <td>
+                <div class="competition-info">
+                  <div class="competition-icon">🗣️</div>
+                  <div>
+                    <div class="competition-name">ચરિત્ર સ્પર્ધા</div>
+                    <div class="competition-type">વક્તવ્ય  કળા</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="rules-list">
+                  <div class="rule-item"><span>📄</span> 1000-1500 શબ્દ</div>
+                  <div class="rule-item"><span>🎯</span> ભગવાનનું ચરિત્ર</div>
+                  <div class="rule-item"><span>👤</span> વ્યક્તિગત</div>
+                </div>
+              </td>
+              <td>
+                <button class="register-btn" data-comp="charitra">
+                  ચારિત્ર માટે નોંધણી
+                </button>
+              </td>
+            </tr>
+
+            <!-- Kadigan Competition -->
+            <tr class="competition-row kadigan-card" data-category="kadigan">
+              <td>
+                <div class="competition-info">
+                  <div class="competition-icon">🎶</div>
+                  <div>
+                    <div class="competition-name">કડીગાન સ્પર્ધા</div>
+                    <div class="competition-type">ગીત કળા</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="rules-list">
+                  <div class="rule-item"><span>🎵</span> ગણતિત કડીઓ</div>
+                  <div class="rule-item"><span>⏰</span> 2-5 મિનિટ</div>
+                  <div class="rule-item"><span>👤</span> એકલા</div>
+                  <div class="rule-item"><span>🎼</span> ભજન</div>
+                </div>
+              </td>
+              <td>
+                <button class="register-btn" data-comp="kadigan">
+                  કડીગાન માટે નોંધણી
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Registration Form -->
+      <section class="content-card registration-section" id="register">
+        <div class="section-head">
+          <p class="section-head__tag">સરળ નોંધણી</p>
+          <h2>તમારી સ્પર્ધા પસંદ કરો</h2>
+        </div>
+
+        <form class="competition-form" action="{{ url_for('submit_competition') }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <input type="hidden" name="competition_type" id="competition-type" value="">
+          <input type="hidden" name="user_name" value="{{ session.user_name|default('Guest') }}">
+          <input type="hidden" name="user_id" value="{{ session.user_id|default('guest') }}">
+
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label class="form-field">
+                <span>નામ *</span>
+                <input type="text" name="name" value="{{ session.user_name|default('') }}" required />
+              </label>
+              <label class="form-field">
+                <span>મોબાઈલ નંબર *</span>
+                <input type="tel" name="mobile" required />
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label class="form-field full-width">
+                <span>સ્પર્ધા પસંદગી *</span>
+                <select name="competition" id="competition-select" required>
+                  <option value="">સ્પર્ધા પસંદ કરો</option>
+                  <option value="kirtan">કીર્તન સ્પર્ધા</option>
+                  <option value="charitra">ચરિત્ર લેખન</option>
+                  <option value="kadigan">કડીગણ સ્પર્ધા</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label class="form-field">
+                <span>સભ્યોની સંખ્યા</span>
+                <input type="number" name="team_size" min="1" max="10" value="1" />
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <span>🎉</span> સ્પર્ધામાં નોંધણી કરો
+          </button>
+        </form>
+
+        <!-- Success/Error Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+            <div class="form-status form-status--visible 
+              {% if category == 'success' %}form-status--success
+              {% else %}form-status--error{% endif %}">
+              {{ message }}
+            </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const nameInput = document.querySelector('input[name="name"]');
+      if (nameInput && "{{ session.user_name|default('') }}".trim()) {
+        nameInput.value = "{{ session.user_name|default('') }}".trim();
+      }
+
+      // Table row click handler - FIXED
+      document.querySelectorAll('.competition-row').forEach((row) => {
+        row.addEventListener('click', function(e) {
+          // Don't trigger if clicking register button
+          if (e.target.closest('.register-btn')) return;
+          
+          const compType = this.dataset.category;
+          
+          // Update hidden field
+          const hiddenInput = document.getElementById('competition-type');
+          if (hiddenInput) hiddenInput.value = compType;
+          
+          // Update select dropdown
+          const selectInput = document.getElementById('competition-select');
+          if (selectInput) selectInput.value = compType;
+          
+          // Visual feedback
+          document.querySelectorAll('.competition-row').forEach(r => 
+            r.classList.remove('selected')
+          );
+          this.classList.add('selected');
+          
+          // Smooth scroll to form
+          setTimeout(() => {
+            document.getElementById('register')?.scrollIntoView({ 
+              behavior: 'smooth' 
+            });
+          }, 100);
+        });
+      });
+
+      // Form validation enhancement
+      const form = document.querySelector('.competition-form');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          const competitionSelect = document.getElementById('competition-select');
+          const mobileInput = document.querySelector('input[name="mobile"]');
+          const nameInput = document.querySelector('input[name="name"]');
+          
+          if (!competitionSelect.value) {
+            e.preventDefault();
+            alert('કૃપા કરીને સ્પર્ધા પસંદ કરો!');
+            return false;
+          }
+          
+          if (!mobileInput.value || mobileInput.value.length < 10) {
+            e.preventDefault();
+            alert('કૃપા કરીને સાચો મોબાઈલ નંબર દાખલ કરો!');
+            return false;
+          }
+          
+          if (!nameInput.value.trim()) {
+            e.preventDefault();
+            alert('કૃપા કરીને નામ દાખલ કરો!');
+            return false;
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>

@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 from pathlib import Path
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, flash, redirect, render_template, request, session, url_for, render_template_string
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 import os
 import secrets
 
@@ -16,8 +16,9 @@ NEW_SABHYA_FILE = BASE_DIR / "new_sabhya_submissions.csv"
 
 MAX_ENTRIES = 160
 
-EXISTING_COLUMNS = ["no.", "Name", "Mobile", "SMV NO", "Password"]
-NEW_SABHYA_COLUMNS = ["no.", "First Name", "Contact No.", "Password", "Created At"]
+# ✅ UPDATED COLUMNS with "Competition" added
+EXISTING_COLUMNS = ["no.", "Name", "Mobile", "SMV NO", "Password", "Competition"]
+NEW_SABHYA_COLUMNS = ["no.", "First Name", "Contact No.", "Password", "Created At", "Competition"]
 
 # ---------------- HELPERS ---------------- #
 def generate_csrf_token():
@@ -34,6 +35,11 @@ def ensure_csv(file, columns):
 
         df = pd.read_csv(file)
         df.columns = df.columns.str.strip()
+
+        # Handle old CSV files without Competition column
+        if 'Competition' not in df.columns:
+            df['Competition'] = ''  # Add empty column for backward compatibility
+            df = df.reindex(columns=columns)
 
         if list(df.columns) != columns:
             df = df.reindex(columns=columns)
@@ -67,14 +73,13 @@ def write_to_csv(file, columns, new_row):
         new_df = new_df.reindex(columns=columns)
         df = pd.concat([df, new_df], ignore_index=True)
         df.to_csv(file, index=False)
+        print(f"✅ Saved to {file}: {new_row}")  # Debug log
     except Exception as e:
         print(f"CSV write error: {e}")
         raise
 
 def get_next_entry_number_atomic():
     """Atomic increment to prevent race conditions"""
-    lock_file = BASE_DIR / "entry_counter.lock"
-    
     try:
         df1 = safe_read_csv(EXISTING_FILE, EXISTING_COLUMNS)
         df2 = safe_read_csv(NEW_SABHYA_FILE, NEW_SABHYA_COLUMNS)
@@ -82,7 +87,7 @@ def get_next_entry_number_atomic():
     except:
         return 1
 
-# Initialize files
+# Initialize files with new columns
 ensure_csv(EXISTING_FILE, EXISTING_COLUMNS)
 ensure_csv(NEW_SABHYA_FILE, NEW_SABHYA_COLUMNS)
 
@@ -90,42 +95,26 @@ ensure_csv(NEW_SABHYA_FILE, NEW_SABHYA_COLUMNS)
 
 @app.route("/")
 def index():
-    generate_csrf_token()  # Generate token
+    generate_csrf_token()
     active_form = request.args.get('form', 'existing')
     return render_template("home.html", 
                          welcome_name=session.get("user_name"),
                          active_form=active_form,
                          csrf_token=generate_csrf_token())
+
 @app.route("/schedule")
 def schedule():
     return render_template("schedule.html")
-
-@app.route("/test-csrf")
-def test_csrf():
-    return render_template_string("""
-    <form method="POST" action="/test-csrf-submit">
-        {{ csrf_token() }}
-        <input type="submit" value="Test CSRF">
-    </form>
-    """)
-
-@app.route("/test-csrf-submit", methods=["POST"])
-def test_csrf_submit():
-    return "CSRF Working! ✅"
 
 @app.route("/katha")
 def katha():
     return render_template("katha.html")
 
-@app.route("/competition")
-def competition():
-    return render_template("competition.html")
-
 @app.route("/about")
 def about():
     return render_template("About_us.html")
 
-# ---------------- REGISTER ---------------- #
+# ---------------- REGISTER (Updated with Competition) ---------------- #
 
 @app.route("/submit", methods=["POST"])
 def submit():
@@ -136,6 +125,7 @@ def submit():
         
     entry_number = get_next_entry_number_atomic()
     registration_type = request.form.get("registration_type")
+    competition = request.form.get("competition", "None")  # ✅ Get competition
 
     if entry_number > MAX_ENTRIES:
         flash("Limit reached!", "error")
@@ -156,13 +146,14 @@ def submit():
             NEW_SABHYA_COLUMNS,
             {
                 "no.": entry_number,
-                "First Name": name[:50],  # Limit length
+                "First Name": name[:50],
                 "Contact No.": mobile[:15],
                 "Password": generate_password_hash(password),
                 "Created At": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "Competition": competition  # ✅ Added Competition column
             },
         )
-        flash("New sabhya registered!", "success")
+        flash(f"New sabhya registered for {competition}! ✅", "success")
         return redirect(url_for("index"))
 
     # -------- EXISTING SABHYA -------- #
@@ -184,12 +175,70 @@ def submit():
             "Mobile": mobile[:15],
             "SMV NO": smv[:20],
             "Password": generate_password_hash(password),
+            "Competition": competition  # ✅ Added Competition column
         },
     )
-    flash("Existing sabhya registered!", "success")
+    flash(f"Existing sabhya registered for {competition}! ✅", "success")
     return redirect(url_for("index"))
 
-# ---------------- LOGIN ---------------- #
+# ---------------- COMPETITION SUBMISSION ---------------- # ✅ NEW ROUTE
+@app.route("/competition")
+def competition():
+    """GET: Show competition page"""
+    csrf_token = generate_csrf_token()
+    return render_template("competition.html", csrf_token=csrf_token)
+
+@app.route("/submit_competition", methods=["POST"])
+def submit_competition():
+    """POST: Process competition registration"""
+    submitted_token = request.form.get('csrf_token')
+    if submitted_token != session.get('csrf_token'):
+        flash("Invalid request!", "error")
+        return redirect(url_for("competition"))
+    
+    # Get form data
+    name = request.form.get("name", "").strip()
+    mobile = request.form.get("mobile", "").strip()
+    competition = request.form.get("competition", "").strip()
+    team_name = request.form.get("team_name", "").strip()
+    team_size = request.form.get("team_size", "1")
+    
+    # Validation
+    if not all([name, mobile, competition]):
+        flash("Name, mobile, and competition required!", "error")
+        return redirect(url_for("competition"))
+    
+    if len(mobile) != 10 or not mobile.isdigit():
+        flash("Enter valid 10-digit mobile number!", "error")
+        return redirect(url_for("competition"))
+    
+    # Save to CSV
+    COMPETITION_FILE = BASE_DIR / "competitions.csv"
+    COMPETITION_COLUMNS = ["no.", "timestamp", "name", "mobile", "competition", "team_name", "team_size"]
+    
+    ensure_csv(COMPETITION_FILE, COMPETITION_COLUMNS)
+    
+    entry_number = get_next_entry_number_atomic()
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    competition_data = {
+        "no.": entry_number,
+        "timestamp": timestamp,
+        "name": name[:50],
+        "mobile": mobile,
+        "competition": competition,
+        "team_name": team_name[:50],
+        "team_size": team_size
+    }
+    
+    write_to_csv(COMPETITION_FILE, COMPETITION_COLUMNS, competition_data)
+    flash(f"✅ {name} registered for {competition.upper()} successfully!", "success")
+    
+    # Regenerate CSRF
+    session['csrf_token'] = secrets.token_urlsafe(32)
+    return redirect(url_for("competition"))
+
+# ---------------- LOGIN (unchanged) ---------------- #
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -197,10 +246,9 @@ def login():
     
     if request.method == "POST":
         submitted_token = request.form.get('csrf_token')
-        if submitted_token != session.get('csrf_token'):  # ✅ Validate token value
+        if submitted_token != session.get('csrf_token'):
             return render_template("login.html", login_error="Invalid request ❌", csrf_token=generate_csrf_token())
         
-        # Validate required fields first
         name = request.form.get("name", "").strip()
         mobile = request.form.get("mobile_no", "").strip()
         
@@ -213,12 +261,10 @@ def login():
         if not password:
             return render_template("login.html", login_error="Password required! ❌", csrf_token=generate_csrf_token())
 
-        # Rest of your code unchanged...
         df_existing = safe_read_csv(EXISTING_FILE, EXISTING_COLUMNS)
         df_new = safe_read_csv(NEW_SABHYA_FILE, NEW_SABHYA_COLUMNS)
         stored_password = None
 
-        # -------- EXISTING SABHYA (requires SMV) -------- #
         if smv and not df_existing.empty:
             user = df_existing[
                 (df_existing["Name"].astype(str).str.strip() == name) &
@@ -228,7 +274,6 @@ def login():
             if not user.empty:
                 stored_password = user.iloc[0]["Password"]
 
-        # -------- NEW SABHYA (no SMV required) -------- #
         if stored_password is None and not df_new.empty:
             user = df_new[
                 (df_new["First Name"].astype(str).str.strip() == name) &
@@ -237,7 +282,6 @@ def login():
             if not user.empty:
                 stored_password = user.iloc[0]["Password"]
 
-        # -------- PASSWORD CHECK -------- #
         if stored_password and check_password_hash(stored_password, password):
             session["user_name"] = name
             session["user_mobile"] = mobile
@@ -249,7 +293,6 @@ def login():
     return render_template("login.html", csrf_token=generate_csrf_token())
 
 # ---------------- LOGOUT ---------------- #
-
 @app.route("/logout")
 def logout():
     session.clear()
