@@ -355,6 +355,9 @@ input,
 }
 
 @media (max-width: 720px) {
+  body{
+    overflow-x: none;
+  }
   .page-shell {
     width: min(100% - 20px, 1250px);
     padding: 20px 0 40px;

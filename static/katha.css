@@ -445,6 +445,9 @@ button,
 }
 
 @media (max-width: 720px) {
+  body{
+    overflow-x: none;
+  }
   .hero {
     border-radius: 16px;
     padding: 20px;
