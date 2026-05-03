@@ -167,7 +167,7 @@
             data-form-mode="existing"
             {% if active_form == 'new' %}hidden{% endif %}
           >
-            {{ csrf_token() }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input type="hidden" name="registration_type" value="existing" />
 
             <div class="register-grid register-grid--compact">
@@ -215,7 +215,7 @@
             data-form-mode="new"
             {% if active_form != 'new' %}hidden{% endif %}
           >
-            {{ csrf_token() }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}"> 
             <input type="hidden" name="registration_type" value="new" />
 
             <div class="register-grid register-grid--full">
@@ -499,6 +499,13 @@
             formStatus.textContent = "";
           }
         });
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        // Ensure CSRF tokens are available
+        if (!document.querySelector('input[name="csrf_token"]')) {
+          console.log('CSRF token not found');
+        }
       });
     </script>
 

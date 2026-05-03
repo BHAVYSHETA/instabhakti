@@ -61,6 +61,7 @@
 
             <form class="login-form" action="{{ url_for('login') }}" method="post">
               <label class="form-field">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <span>Name</span>
                 <input
                   type="text"

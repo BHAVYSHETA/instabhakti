@@ -2,14 +2,12 @@ import pandas as pd
 from datetime import datetime
 from pathlib import Path
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, flash, redirect, render_template, request, session, url_for
-from flask_wtf.csrf import CSRFProtect
+from flask import Flask, flash, redirect, render_template, request, session, url_for, render_template_string
 import os
 import secrets
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(16))
-csrf = CSRFProtect(app)
 
 # Use relative path or environment variable
 BASE_DIR = Path(__file__).parent
@@ -22,6 +20,11 @@ EXISTING_COLUMNS = ["no.", "Name", "Mobile", "SMV NO", "Password"]
 NEW_SABHYA_COLUMNS = ["no.", "First Name", "Contact No.", "Password", "Created At"]
 
 # ---------------- HELPERS ---------------- #
+def generate_csrf_token():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = secrets.token_urlsafe(32)
+    return session['csrf_token']
+
 def ensure_csv(file, columns):
     try:
         if not file.exists():
@@ -87,13 +90,28 @@ ensure_csv(NEW_SABHYA_FILE, NEW_SABHYA_COLUMNS)
 
 @app.route("/")
 def index():
-    active_form = request.args.get('form', 'existing')  # Default to existing
+    generate_csrf_token()  # Generate token
+    active_form = request.args.get('form', 'existing')
     return render_template("home.html", 
                          welcome_name=session.get("user_name"),
-                         active_form=active_form)
+                         active_form=active_form,
+                         csrf_token=generate_csrf_token())
 @app.route("/schedule")
 def schedule():
     return render_template("schedule.html")
+
+@app.route("/test-csrf")
+def test_csrf():
+    return render_template_string("""
+    <form method="POST" action="/test-csrf-submit">
+        {{ csrf_token() }}
+        <input type="submit" value="Test CSRF">
+    </form>
+    """)
+
+@app.route("/test-csrf-submit", methods=["POST"])
+def test_csrf_submit():
+    return "CSRF Working! ✅"
 
 @app.route("/katha")
 def katha():
@@ -111,10 +129,11 @@ def about():
 
 @app.route("/submit", methods=["POST"])
 def submit():
-    if not request.form.get('csrf_token'):
+    submitted_token = request.form.get('csrf_token')
+    if submitted_token != session.get('csrf_token'):
         flash("Invalid request!", "error")
         return redirect(url_for("index"))
-    
+        
     entry_number = get_next_entry_number_atomic()
     registration_type = request.form.get("registration_type")
 
@@ -174,23 +193,27 @@ def submit():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    generate_csrf_token()
+    
     if request.method == "POST":
-        if not request.form.get('csrf_token'):
-            return render_template("login.html", login_error="Invalid request ❌")
+        submitted_token = request.form.get('csrf_token')
+        if submitted_token != session.get('csrf_token'):  # ✅ Validate token value
+            return render_template("login.html", login_error="Invalid request ❌", csrf_token=generate_csrf_token())
         
         # Validate required fields first
         name = request.form.get("name", "").strip()
         mobile = request.form.get("mobile_no", "").strip()
         
         if not name or not mobile:
-            return render_template("login.html", login_error="Name and mobile required! ❌")
+            return render_template("login.html", login_error="Name and mobile required! ❌", csrf_token=generate_csrf_token())
         
         password = request.form.get("password", "").strip()
-        smv = request.form.get("smv_no", "").strip() or ""  # Optional for new sabhya
+        smv = request.form.get("smv_no", "").strip() or ""
         
         if not password:
-            return render_template("login.html", login_error="Password required! ❌")
+            return render_template("login.html", login_error="Password required! ❌", csrf_token=generate_csrf_token())
 
+        # Rest of your code unchanged...
         df_existing = safe_read_csv(EXISTING_FILE, EXISTING_COLUMNS)
         df_new = safe_read_csv(NEW_SABHYA_FILE, NEW_SABHYA_COLUMNS)
         stored_password = None
@@ -221,9 +244,9 @@ def login():
             flash("Login successful! ✅", "success")
             return redirect(url_for("index"))
 
-        return render_template("login.html", login_error="Invalid credentials ❌")
+        return render_template("login.html", login_error="Invalid credentials ❌", csrf_token=generate_csrf_token())
 
-    return render_template("login.html")
+    return render_template("login.html", csrf_token=generate_csrf_token())
 
 # ---------------- LOGOUT ---------------- #
 
